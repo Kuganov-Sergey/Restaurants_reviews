@@ -3,20 +3,14 @@ package com.example.restaurants_reviews;
 import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.entity.Review;
-import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.service.ReviewService;
 import org.junit.jupiter.api.*;
-import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.mockStatic;
 
 @SpringBootTest(classes = {
         RestaurantsReviewsApplication.class})
@@ -102,26 +96,9 @@ public class AppContextTest {
     }
 
     @Test
-    void addRestaurantByNameAndCreationDate() throws FoundationDateIsExpiredException {
-        MockedStatic<LocalDate> localDateMockedStatic = mockStatic(LocalDate.class, CALLS_REAL_METHODS);
-        LocalDate defaultDateNow = LocalDate.of(2012, 2, 2);
-        localDateMockedStatic.when(LocalDate::now).thenReturn(defaultDateNow);
-        assertThrows(FoundationDateIsExpiredException.class,
-                () -> restaurantService
-                        .addRestaurantByNameAndCreationDate("mac",
-                                LocalDate.of(2015, 2, 2)));
-
-        LocalDate localDateExpected = LocalDate.of(2012, 2, 2);
-        restaurantService.addRestaurantByNameAndCreationDate("kfc", localDateExpected);
-        assertEquals(localDateExpected, restaurantService.getCreationDateByRestaurantName("kfc"));
-    }
-
-    @Test
     void updateReviewByRestaurantId() {
-        String expectedReview = "best burgers";
+        String expectedReview = "best place";
         reviewService.updateReviewByRestaurantId(restaurantService.getAllRestaurants().get(0).getId(), expectedReview);
         assertEquals(expectedReview, reviewService.getReviewsByRestaurantName("mac").get(0));
-
     }
-
 }
