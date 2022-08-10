@@ -1,5 +1,5 @@
 package com.example.restaurants_reviews.service;
-;
+
 import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
@@ -7,7 +7,6 @@ import com.example.restaurants_reviews.exception.IncorrectEmailAddressException;
 import com.example.restaurants_reviews.util.EmailUtil;
 import com.example.restaurants_reviews.util.PhoneUtil;
 import com.google.i18n.phonenumbers.NumberParseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,8 +94,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         Restaurant restaurant = new Restaurant();
         restaurant.setName(name);
-        restaurant.setDescription("mac");
-        restaurant.setEmailAddress("default");
+        restaurant.setDescription("totory");
+        restaurant.setEmailAddress("default@mail.ru");
         restaurant.setPhoneNumber("absent");
         restaurant.setDate(creationDate);
         restaurantRepository.save(restaurant);

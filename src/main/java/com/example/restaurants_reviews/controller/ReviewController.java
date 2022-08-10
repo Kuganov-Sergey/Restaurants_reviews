@@ -1,8 +1,8 @@
 package com.example.restaurants_reviews.controller;
-;
-import com.example.restaurants_reviews.entity.Review;
+
+import com.example.restaurants_reviews.dto.in.ReviewInDTO;
+import com.example.restaurants_reviews.mapper.ReviewMapper;
 import com.example.restaurants_reviews.service.ReviewService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,8 +11,14 @@ import java.util.List;
 @RequestMapping("/review")
 public class ReviewController {
 
-    @Autowired
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
+    private final ReviewMapper reviewMapper;
+
+    public ReviewController(ReviewService reviewService, ReviewMapper reviewMapper) {
+        this.reviewService = reviewService;
+        this.reviewMapper = reviewMapper;
+    }
+
 
     @GetMapping("/{name}")
     public List<String> getReviewsByName(@PathVariable String name) {
@@ -25,7 +31,7 @@ public class ReviewController {
     }
 
     @PostMapping("/new")
-    public void addReview(@RequestBody Review review) {
-        reviewService.addReview(review);
+    public void addReview(@RequestBody ReviewInDTO reviewInDTO) {
+        reviewService.addReview(reviewMapper.reviewInDTOToReviewEntity(reviewInDTO));
     }
 }

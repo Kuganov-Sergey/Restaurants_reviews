@@ -1,11 +1,12 @@
 package com.example.restaurants_reviews.entity;
 
 import com.example.restaurants_reviews.constraint.ValidPhoneNumber;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 
@@ -20,14 +21,16 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @NotBlank
+//    @NotNull
     @Column(name = "name")
     private String name;
 
+//    @NotNull
     @Column(name = "description")
     private String description;
 
 //    @ValidPhoneNumber
+//    @NotNull
     @Basic
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -36,6 +39,7 @@ public class Restaurant {
     @Column(name = "email_address")
     private String emailAddress;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @Column(name = "creation_date")
     private LocalDate date;
 
