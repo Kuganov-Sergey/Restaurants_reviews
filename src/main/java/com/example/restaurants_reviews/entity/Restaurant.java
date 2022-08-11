@@ -1,13 +1,12 @@
 package com.example.restaurants_reviews.entity;
 
-import com.example.restaurants_reviews.constraint.ValidPhoneNumber;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 @Entity
@@ -21,16 +20,12 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @NotNull
     @Column(name = "name")
     private String name;
 
-//    @NotNull
     @Column(name = "description")
     private String description;
 
-//    @ValidPhoneNumber
-//    @NotNull
     @Basic
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -43,4 +38,16 @@ public class Restaurant {
     @Column(name = "creation_date")
     private LocalDate date;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Restaurant that = (Restaurant) o;
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(emailAddress, that.emailAddress) && Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, phoneNumber, emailAddress, date);
+    }
 }

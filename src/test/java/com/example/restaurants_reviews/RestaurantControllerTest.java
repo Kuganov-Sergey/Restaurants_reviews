@@ -4,7 +4,6 @@ import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.service.RestaurantService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -34,6 +33,9 @@ public class RestaurantControllerTest extends AppContextTest {
 
     @Autowired
     private RestaurantService restaurantService;
+
+//    @Autowired
+//    private ObjectMapper objectMapper;
 
     @Test
     void getAll() throws Exception {

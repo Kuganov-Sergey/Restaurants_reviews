@@ -1,7 +1,8 @@
-package com.example.restaurants_reviews.service;
+package com.example.restaurants_reviews.service.impl;
 
 import com.example.restaurants_reviews.dao.ReviewRepository;
 import com.example.restaurants_reviews.entity.Review;
+import com.example.restaurants_reviews.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
