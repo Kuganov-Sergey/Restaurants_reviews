@@ -1,5 +1,6 @@
 package com.example.restaurants_reviews.dto.in;
 
+import com.example.restaurants_reviews.constraint.ValidCreationDate;
 import com.example.restaurants_reviews.constraint.ValidPhoneNumber;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
@@ -28,5 +29,6 @@ public class RestaurantInDTO {
     private String emailAddress;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    @ValidCreationDate
     private LocalDate date;
 }

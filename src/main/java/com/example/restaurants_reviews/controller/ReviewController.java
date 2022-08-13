@@ -31,7 +31,8 @@ public class ReviewController {
     }
 
     @PostMapping("/new")
-    public void addReview(@RequestBody ReviewInDTO reviewInDTO) {
+    public ReviewInDTO addReview(@RequestBody ReviewInDTO reviewInDTO) {
         reviewService.addReview(reviewMapper.reviewInDTOToReviewEntity(reviewInDTO));
+        return reviewInDTO;
     }
 }

@@ -4,6 +4,7 @@ import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.IncorrectEmailAddressException;
+import com.example.restaurants_reviews.exception.RestaurantNotFoundException;;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.util.EmailUtil;
 import com.example.restaurants_reviews.util.PhoneUtil;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -24,9 +26,12 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public String getDescriptionByName(String name) {
-        Restaurant restaurant = findRestaurantByName(name);
-        return restaurant.getDescription();
+    public String getDescriptionByName(String name) throws RestaurantNotFoundException {
+        Optional<Restaurant> restaurant = Optional.ofNullable(findRestaurantByName(name));
+        if (restaurant.isEmpty()) {
+            throw new RestaurantNotFoundException();
+        }
+        return restaurant.get().getDescription();
     }
 
     @Override
@@ -36,7 +41,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void addRestaurant(Restaurant restaurant) {
+    public long addRestaurant(Restaurant restaurant) {
         String phone = restaurant.getPhoneNumber();
         if (phone == null || phone.equals("absent")) {
             restaurant.setPhoneNumber("absent");
@@ -47,7 +52,7 @@ public class RestaurantServiceImpl implements RestaurantService {
                 e.printStackTrace();
             }
         }
-        restaurantRepository.save(restaurant);
+        return restaurantRepository.save(restaurant).getId();
     }
 
     @Override
@@ -69,7 +74,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurant.setPhoneNumber(PhoneUtil.reformatRuTelephone(phone));
             restaurantRepository.save(restaurant);
         } catch (NumberParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -80,22 +85,23 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurant.setEmailAddress(emailAddress);
             restaurantRepository.save(restaurant);
         } else {
-                throw new IncorrectEmailAddressException("write correct Email Address");
+            throw new IncorrectEmailAddressException("write correct Email Address");
         }
     }
 
     @Override
-    public void addRestaurantByNameAndCreationDate(String name, LocalDate creationDate) throws FoundationDateIsExpiredException {
+    public long addRestaurantByNameAndCreationDate(String name, LocalDate creationDate) throws FoundationDateIsExpiredException {
         if (creationDate == null || LocalDate.now().isBefore(creationDate)) {
             throw new FoundationDateIsExpiredException(name, creationDate);
         }
         Restaurant restaurant = new Restaurant();
         restaurant.setName(name);
-        restaurant.setDescription("totory");
-        restaurant.setEmailAddress("default@mail.ru");
-        restaurant.setPhoneNumber("absent");
+        restaurant.setDescription("Absent");
+        restaurant.setEmailAddress("Absent");
+        restaurant.setPhoneNumber("Absent");
         restaurant.setDate(creationDate);
         restaurantRepository.save(restaurant);
+        return restaurant.getId();
     }
 
     @Override

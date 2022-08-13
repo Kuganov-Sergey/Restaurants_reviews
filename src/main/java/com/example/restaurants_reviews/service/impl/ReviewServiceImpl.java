@@ -33,7 +33,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void updateReviewByRestaurantId(int id, String review) {
+    public void updateReviewByRestaurantId(long id, String review) {
         Optional<Review> reviewNewObject = reviewRepository.findById(id);
         if (reviewNewObject.isPresent()) {
             reviewNewObject.get().setReview(review);

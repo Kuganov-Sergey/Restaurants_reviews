@@ -12,5 +12,5 @@ public interface ReviewService {
 
     void addReview(Review review);
 
-    void updateReviewByRestaurantId(int id, String review);
+    void updateReviewByRestaurantId(long id, String review);
 }

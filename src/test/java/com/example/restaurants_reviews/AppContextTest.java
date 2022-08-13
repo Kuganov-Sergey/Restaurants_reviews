@@ -3,6 +3,7 @@ package com.example.restaurants_reviews;
 import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.entity.Review;
+import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.service.ReviewService;
 import org.junit.jupiter.api.*;
@@ -59,14 +60,13 @@ public class AppContextTest {
 
     @Test
     void getAllRestaurants() {
-        assertNotNull(restaurantService.getAllRestaurants());
         assertEquals("mac", restaurantService.getAllRestaurants().get(0).getName());
         assertEquals("burgers", restaurantService.getAllRestaurants().get(0).getDescription());
         assertEquals("+79997771122", restaurantService.getAllRestaurants().get(0).getPhoneNumber());
     }
 
     @Test
-    void updateDescriptionByName() {
+    void updateDescriptionByName() throws RestaurantNotFoundException {
         String newDescription = "best burgers";
         restaurantService.updateDescriptionByName("mac", newDescription);
         assertEquals(newDescription, restaurantService.getDescriptionByName("mac"));

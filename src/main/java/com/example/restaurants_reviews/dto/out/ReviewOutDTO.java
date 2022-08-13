@@ -10,8 +10,8 @@ import lombok.*;
 @Builder
 public class ReviewOutDTO {
 
-    private int id;
+    private Long id;
     private Restaurant restaurant_id;
     private String review;
-    private double rating;
+    private Double rating;
 }

@@ -41,8 +41,9 @@ public class RestaurantController {
     }
 
     @PostMapping("/new")
-    public void addRestaurant(@RequestBody @Valid RestaurantInDTO restaurantInDTO) {
+    public RestaurantInDTO addRestaurant(@RequestBody @Valid RestaurantInDTO restaurantInDTO) {
         restaurantService.addRestaurant(restaurantMapper.restaurantInDTOToRestaurantEntity(restaurantInDTO));
+        return restaurantInDTO;
     }
 
     @PutMapping("/update/{name}/{description}")

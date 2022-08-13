@@ -51,7 +51,7 @@ public class ReviewControllerTest extends AppContextTest {
     void addReview() throws Exception {
         ReviewOutDTO review = ReviewOutDTO.builder().review("cool burgers")
                 .restaurant_id(restaurantService.findRestaurantByName("mac"))
-                .rating(5)
+                .rating(5.0)
                 .build();
         ObjectMapper objectMapper = new JsonMapper();
         String obj = objectMapper.writeValueAsString(review);

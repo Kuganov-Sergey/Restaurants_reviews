@@ -5,7 +5,6 @@ import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -34,12 +33,11 @@ public class RestaurantControllerTest extends AppContextTest {
     @Autowired
     private RestaurantService restaurantService;
 
-//    @Autowired
-//    private ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void getAll() throws Exception {
-        ObjectMapper objectMapper = new JsonMapper();
         objectMapper.registerModule(new JavaTimeModule());
         String expected = objectMapper.writeValueAsString(restaurantService.getAllRestaurants());
         this.mockMvc.perform(get("/restaurant/all"))
@@ -79,9 +77,9 @@ public class RestaurantControllerTest extends AppContextTest {
                 .description("burgers")
                 .phoneNumber("+79996665522")
                 .emailAddress(null)
+                .date(LocalDate.of(2000, 10, 10))
                 .name("mmm")
                 .build();
-        ObjectMapper objectMapper = new JsonMapper();
         objectMapper.registerModule(new JavaTimeModule());
         String obj = objectMapper.writeValueAsString(restaurant);
         this.mockMvc.perform(post("/restaurant/new")
@@ -105,7 +103,6 @@ public class RestaurantControllerTest extends AppContextTest {
                 .emailAddress(null)
                 .name("mac")
                 .build();
-        ObjectMapper objectMapper = new JsonMapper();
         String expected = objectMapper.writeValueAsString(restaurant);
         this.mockMvc.perform(get("/restaurant/{name}", "mac"))
                 .andDo(print())
@@ -116,12 +113,12 @@ public class RestaurantControllerTest extends AppContextTest {
 
     @Test
     public void validationTest() throws Exception {
-        ObjectMapper objectMapper = new JsonMapper();
         RestaurantInDTO restaurant = RestaurantInDTO.builder()
                 .name(" ")
                 .description(" ")
                 .emailAddress(" dasdsa")
                 .phoneNumber("asdasdas")
+                .date(LocalDate.of(2050, 10, 10))
                 .build();
         String expected = objectMapper.writeValueAsString(restaurant);
         this.mockMvc.perform(post("/restaurant/new")
@@ -130,10 +127,11 @@ public class RestaurantControllerTest extends AppContextTest {
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().json("""
                         {
-                            "emailAddress": "Is not email format",
-                            "phoneNumber": "Invalid format phone number",
-                            "name": "Empty name",
-                            "description": "Empty description"
+                                    "date": "Creation date before the current date",
+                                    "emailAddress": "Is not email format",
+                                    "phoneNumber": "Invalid format phone number",
+                                    "name": "Empty name",
+                                    "description": "Empty description"
                         }"""));
     }
 }
