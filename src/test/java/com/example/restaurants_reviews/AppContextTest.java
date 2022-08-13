@@ -6,12 +6,11 @@ import com.example.restaurants_reviews.entity.Review;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.service.ReviewService;
+import com.google.i18n.phonenumbers.NumberParseException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {
         RestaurantsReviewsApplication.class})
@@ -42,63 +41,12 @@ public class AppContextTest {
     }
 
     @BeforeEach
-    void setDefaultParameters() {
+    void setDefaultParameters() throws NumberParseException, RestaurantNotFoundException {
         restaurantService.addPhoneByRestaurantName("mac", "+79997771122");
     }
 
     @AfterAll
     void cleanTable() {
         restaurantRepository.deleteAll();
-    }
-
-    @Test
-    void findRestaurantByName() throws Exception {
-        String name = "mac";
-        String newName = restaurantService.findRestaurantByName(name).getName();
-        assertEquals(name, newName);
-    }
-
-    @Test
-    void getAllRestaurants() {
-        assertEquals("mac", restaurantService.getAllRestaurants().get(0).getName());
-        assertEquals("burgers", restaurantService.getAllRestaurants().get(0).getDescription());
-        assertEquals("+79997771122", restaurantService.getAllRestaurants().get(0).getPhoneNumber());
-    }
-
-    @Test
-    void updateDescriptionByName() throws RestaurantNotFoundException {
-        String newDescription = "best burgers";
-        restaurantService.updateDescriptionByName("mac", newDescription);
-        assertEquals(newDescription, restaurantService.getDescriptionByName("mac"));
-        restaurantService.updateDescriptionByName("mac", "burgers");
-    }
-
-
-    @Test
-    void addPhoneByRestaurantName() {
-        String phone = "+79998887766";
-        restaurantService.addPhoneByRestaurantName("mac", phone);
-        assertEquals(phone, restaurantService.findRestaurantByName("mac").getPhoneNumber());
-    }
-
-
-    @Test
-    void getReviewsByRestaurantName() throws Exception {
-        String review = "best place";
-        System.out.println(reviewService.getReviewsByRestaurantName("mac"));
-        assertEquals(review, reviewService.getReviewsByRestaurantName("mac").get(0));
-    }
-
-    @Test
-    void getRatingByRestaurantName() throws Exception {
-        int expectedRating = 5;
-        assertEquals(expectedRating, reviewService.getRatingByRestaurantName("mac"));
-    }
-
-    @Test
-    void updateReviewByRestaurantId() {
-        String expectedReview = "best place";
-        reviewService.updateReviewByRestaurantId(restaurantService.getAllRestaurants().get(0).getId(), expectedReview);
-        assertEquals(expectedReview, reviewService.getReviewsByRestaurantName("mac").get(0));
     }
 }

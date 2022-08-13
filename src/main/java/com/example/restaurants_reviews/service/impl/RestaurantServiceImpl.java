@@ -4,7 +4,7 @@ import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.IncorrectEmailAddressException;
-import com.example.restaurants_reviews.exception.RestaurantNotFoundException;;
+import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.util.EmailUtil;
 import com.example.restaurants_reviews.util.PhoneUtil;
@@ -25,13 +25,18 @@ public class RestaurantServiceImpl implements RestaurantService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @Override
-    public String getDescriptionByName(String name) throws RestaurantNotFoundException {
-        Optional<Restaurant> restaurant = Optional.ofNullable(findRestaurantByName(name));
-        if (restaurant.isEmpty()) {
+    private Restaurant restaurantNotFoundCheck(String name) throws RestaurantNotFoundException {
+        Optional<Restaurant> optionalRestaurant = Optional.ofNullable(restaurantRepository.findRestaurantByName(name));
+        if (optionalRestaurant.isEmpty()) {
             throw new RestaurantNotFoundException();
         }
-        return restaurant.get().getDescription();
+        return optionalRestaurant.get();
+    }
+
+    @Override
+    public String getDescriptionByName(String name) throws RestaurantNotFoundException {
+        Restaurant restaurant = restaurantNotFoundCheck(name);
+        return restaurant.getDescription();
     }
 
     @Override
@@ -41,7 +46,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public long addRestaurant(Restaurant restaurant) {
+    public void addRestaurant(Restaurant restaurant) {
         String phone = restaurant.getPhoneNumber();
         if (phone == null || phone.equals("absent")) {
             restaurant.setPhoneNumber("absent");
@@ -52,12 +57,12 @@ public class RestaurantServiceImpl implements RestaurantService {
                 e.printStackTrace();
             }
         }
-        return restaurantRepository.save(restaurant).getId();
+        restaurantRepository.save(restaurant);
     }
 
     @Override
-    public void updateDescriptionByName(String name, String description) {
-        Restaurant restaurant = findRestaurantByName(name);
+    public void updateDescriptionByName(String name, String description) throws RestaurantNotFoundException {
+        Restaurant restaurant = restaurantNotFoundCheck(name);
         restaurant.setDescription(description);
         addRestaurant(restaurant);
     }
@@ -68,19 +73,18 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void addPhoneByRestaurantName(String name, String phone) {
-        Restaurant restaurant = restaurantRepository.findRestaurantByName(name);
-        try {
-            restaurant.setPhoneNumber(PhoneUtil.reformatRuTelephone(phone));
-            restaurantRepository.save(restaurant);
-        } catch (NumberParseException e) {
-            throw new RuntimeException(e);
-        }
+    public long addPhoneByRestaurantName(String name, String phone) throws RestaurantNotFoundException,
+            NumberParseException {
+        Restaurant restaurant = restaurantNotFoundCheck(name);
+        restaurant.setPhoneNumber(PhoneUtil.reformatRuTelephone(phone));
+        return restaurantRepository.save(restaurant).getId();
+
     }
 
     @Override
-    public void addEmailAddressByName(String name, String emailAddress) throws IncorrectEmailAddressException {
-        Restaurant restaurant = restaurantRepository.findRestaurantByName(name);
+    public void addEmailAddressByName(String name, String emailAddress) throws IncorrectEmailAddressException,
+            RestaurantNotFoundException {
+        Restaurant restaurant = restaurantNotFoundCheck(name);
         if (EmailUtil.checkValid(emailAddress)) {
             restaurant.setEmailAddress(emailAddress);
             restaurantRepository.save(restaurant);
@@ -105,8 +109,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public LocalDate getCreationDateByRestaurantName(String name) {
-        Restaurant restaurant = findRestaurantByName(name);
+    public LocalDate getCreationDateByRestaurantName(String name) throws RestaurantNotFoundException {
+        Restaurant restaurant = restaurantNotFoundCheck(name);
         return restaurant.getDate();
     }
 }

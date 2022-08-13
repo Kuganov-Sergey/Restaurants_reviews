@@ -1,6 +1,5 @@
 package com.example.restaurants_reviews.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,7 +33,6 @@ public class Restaurant {
     @Column(name = "email_address")
     private String emailAddress;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @Column(name = "creation_date")
     private LocalDate date;
 

@@ -3,6 +3,7 @@ package com.example.restaurants_reviews;
 import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
+import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -57,7 +58,7 @@ public class RestaurantControllerTest extends AppContextTest {
     }
 
     @Test
-    void addRestaurantByNameAndCreationDate() throws FoundationDateIsExpiredException {
+    void addRestaurantByNameAndCreationDate() throws FoundationDateIsExpiredException, RestaurantNotFoundException {
         MockedStatic<LocalDate> localDateMockedStatic = mockStatic(LocalDate.class, CALLS_REAL_METHODS);
         LocalDate defaultDateNow = LocalDate.of(2012, 2, 2);
         localDateMockedStatic.when(LocalDate::now).thenReturn(defaultDateNow);

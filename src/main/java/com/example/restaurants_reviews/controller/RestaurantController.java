@@ -4,6 +4,7 @@ import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
+import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.mapper.RestaurantMapper;
 import com.example.restaurants_reviews.service.RestaurantService;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/update/{name}/{description}")
-    public void updateDescriptionByName(@PathVariable String name, @PathVariable String description) {
+    public void updateDescriptionByName(@PathVariable String name, @PathVariable String description) throws RestaurantNotFoundException {
         restaurantService.updateDescriptionByName(name, description);
     }
 
