@@ -1,7 +1,9 @@
 package com.example.restaurants_reviews.controller;
 
+import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
+import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.mapper.RestaurantMapper;
 import com.example.restaurants_reviews.service.RestaurantService;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +41,8 @@ public class RestaurantController {
     }
 
     @PostMapping("/new")
-    public void addRestaurant(@RequestBody @Valid Restaurant restaurant) {
-        restaurantService.addRestaurant(restaurant);
+    public void addRestaurant(@RequestBody @Valid RestaurantInDTO restaurantInDTO) {
+        restaurantService.addRestaurant(restaurantMapper.restaurantInDTOToRestaurantEntity(restaurantInDTO));
     }
 
     @PutMapping("/update/{name}/{description}")
@@ -51,6 +54,12 @@ public class RestaurantController {
     public RestaurantOutDTO findRestaurantByName(@PathVariable String name) {
         Restaurant restaurant = restaurantService.findRestaurantByName(name);
         return restaurantMapper.restaurantToRestaurantOutDTO(restaurant);
+    }
+
+    @PutMapping("/newByNameAndDate/{name}/{date}")
+    public void addRestaurantByNameAndCreationDate(@PathVariable String name, @PathVariable LocalDate date)
+            throws FoundationDateIsExpiredException {
+        restaurantService.addRestaurantByNameAndCreationDate(name, date);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
