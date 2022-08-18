@@ -49,7 +49,8 @@ public class ReviewControllerTest extends AppContextTest {
 
     @Test
     void addReview() throws Exception {
-        ReviewOutDTO review = ReviewOutDTO.builder().review("cool burgers")
+        ReviewOutDTO review = ReviewOutDTO.builder()
+                .review("cool burgers")
                 .restaurant_id(restaurantService.findRestaurantByName("mac"))
                 .rating(5.0)
                 .build();

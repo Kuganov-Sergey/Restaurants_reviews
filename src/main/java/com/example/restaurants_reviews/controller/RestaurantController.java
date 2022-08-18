@@ -7,6 +7,7 @@ import com.example.restaurants_reviews.exception.FoundationDateIsExpiredExceptio
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.mapper.RestaurantMapper;
 import com.example.restaurants_reviews.service.RestaurantService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -62,6 +63,11 @@ public class RestaurantController {
     public void addRestaurantByNameAndCreationDate(@PathVariable String name, @PathVariable LocalDate date)
             throws FoundationDateIsExpiredException {
         restaurantService.addRestaurantByNameAndCreationDate(name, date);
+    }
+
+    @GetMapping("/pagingAll/{pageNumber}/{pageSize}")
+    public Page<Restaurant> getPagingAllRestaurants(@PathVariable int pageNumber, @PathVariable int pageSize) {
+        return restaurantService.getPaginatedAllRestaurants(pageNumber, pageSize);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

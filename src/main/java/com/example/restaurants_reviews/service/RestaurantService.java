@@ -6,6 +6,7 @@ import com.example.restaurants_reviews.exception.FoundationDateIsExpiredExceptio
 import com.example.restaurants_reviews.exception.IncorrectEmailAddressException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.google.i18n.phonenumbers.NumberParseException;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +19,9 @@ public interface RestaurantService {
     void updateDescriptionByName(String name, String description) throws RestaurantNotFoundException;
     Restaurant findRestaurantByName(String name);
     long addPhoneByRestaurantName(String name, String phone) throws RestaurantNotFoundException, NumberParseException;
-    void addEmailAddressByName(String name, String emailAddress) throws FoundationDateIsExpiredException, IncorrectEmailAddressException, RestaurantNotFoundException;
+    void addEmailAddressByName(String name, String emailAddress) throws FoundationDateIsExpiredException,
+            IncorrectEmailAddressException, RestaurantNotFoundException;
     long addRestaurantByNameAndCreationDate(String name, LocalDate creationDate) throws FoundationDateIsExpiredException;
     LocalDate getCreationDateByRestaurantName(String name) throws RestaurantNotFoundException;
+    Page<Restaurant> getPaginatedAllRestaurants(int pageNum, int pageSize);
 }

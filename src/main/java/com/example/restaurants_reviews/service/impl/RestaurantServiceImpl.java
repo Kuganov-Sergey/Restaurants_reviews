@@ -9,6 +9,9 @@ import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.util.EmailUtil;
 import com.example.restaurants_reviews.util.PhoneUtil;
 import com.google.i18n.phonenumbers.NumberParseException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,6 +64,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    @Transactional
     public void updateDescriptionByName(String name, String description) throws RestaurantNotFoundException {
         Restaurant restaurant = restaurantNotFoundCheck(name);
         restaurant.setDescription(description);
@@ -112,5 +116,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     public LocalDate getCreationDateByRestaurantName(String name) throws RestaurantNotFoundException {
         Restaurant restaurant = restaurantNotFoundCheck(name);
         return restaurant.getDate();
+    }
+
+    @Override
+    public Page<Restaurant> getPaginatedAllRestaurants(int pageNum, int pageSize) {
+        Pageable paging = PageRequest.of(pageNum, pageSize);
+        return restaurantRepository.findAll(paging);
     }
 }
