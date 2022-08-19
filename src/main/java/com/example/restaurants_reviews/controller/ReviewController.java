@@ -1,8 +1,12 @@
 package com.example.restaurants_reviews.controller;
-;
-import com.example.restaurants_reviews.entity.Review;
+
+import com.example.restaurants_reviews.dto.in.ReviewInDTO;
+import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
+import com.example.restaurants_reviews.mapper.ReviewMapper;
 import com.example.restaurants_reviews.service.ReviewService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,12 +15,17 @@ import java.util.List;
 @RequestMapping("/review")
 public class ReviewController {
 
-    @Autowired
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
+
+    public ReviewController(ReviewService reviewService) {
+        this.reviewService = reviewService;
+    }
+
 
     @GetMapping("/{name}")
-    public List<String> getReviewsByName(@PathVariable String name) {
-        return reviewService.getReviewsByRestaurantName(name);
+    public Page<String> getReviewsByName(@PathVariable String name, Pageable pageable) {
+        List<String> reviews = reviewService.getReviewsByRestaurantName(name);
+        return new PageImpl<>(reviews, pageable, reviews.size());
     }
 
     @GetMapping("/rating/{name}")
@@ -25,7 +34,8 @@ public class ReviewController {
     }
 
     @PostMapping("/new")
-    public void addReview(@RequestBody Review review) {
-        reviewService.addReview(review);
+    public ReviewInDTO addReview(@RequestBody ReviewInDTO reviewInDTO) throws RestaurantNotFoundException {
+        reviewService.addReview(reviewInDTO.getRestaurant_id(), reviewInDTO.getReview(), reviewInDTO.getRating());
+        return reviewInDTO;
     }
 }

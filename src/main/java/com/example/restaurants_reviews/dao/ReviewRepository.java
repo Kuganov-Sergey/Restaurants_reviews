@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ReviewRepository extends JpaRepository<Review, Integer> {
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query(value = "SELECT review FROM reviews " +
             "JOIN restaurants AS re WHERE re.name = :name", nativeQuery = true)

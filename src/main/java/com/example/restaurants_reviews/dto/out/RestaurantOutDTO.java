@@ -1,9 +1,7 @@
 package com.example.restaurants_reviews.dto.out;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -14,14 +12,13 @@ import java.time.LocalDate;
 @Builder
 public class RestaurantOutDTO {
 
-    private int id;
+    private Long id;
     private String name;
     private String description;
     private String emailAddress;
     private String phoneNumber;
 
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @DateTimeFormat(pattern = "YYYY-MM-DD")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private LocalDate date;
 
 }

@@ -1,10 +1,15 @@
 package com.example.restaurants_reviews.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
 @Table(name = "reviews")
 public class Review {
@@ -12,7 +17,7 @@ public class Review {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -22,5 +27,25 @@ public class Review {
     private String review;
 
     @Column(name = "rating")
-    private int rating;
+    private Integer rating;
+
+    public Review(Restaurant restaurant_id, String review, Integer rating) {
+        this.restaurant_id = restaurant_id;
+        this.review = review;
+        this.rating = rating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Review review1 = (Review) o;
+        return Objects.equals(id, review1.id) && Objects.equals(rating, review1.rating)
+                && Objects.equals(restaurant_id, review1.restaurant_id) && Objects.equals(review, review1.review);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, restaurant_id, review, rating);
+    }
 }
