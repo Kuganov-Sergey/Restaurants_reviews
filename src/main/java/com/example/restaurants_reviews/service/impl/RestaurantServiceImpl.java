@@ -44,8 +44,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional
-    public List<Restaurant> getAllRestaurants() {
-        return restaurantRepository.findAll();
+    public Page<Restaurant> getAllRestaurants(Pageable pageable) {
+        return restaurantRepository.findAll(pageable);
     }
 
     @Override

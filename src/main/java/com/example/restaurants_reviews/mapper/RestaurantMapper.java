@@ -6,6 +6,8 @@ import com.example.restaurants_reviews.entity.Restaurant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface RestaurantMapper {
 
@@ -13,4 +15,7 @@ public interface RestaurantMapper {
 
     @Mapping(target = "id", ignore = true)
     Restaurant restaurantInDTOToRestaurantEntity(RestaurantInDTO restaurantInDTO);
+
+    @Mapping(target = "id", ignore = true)
+    List<RestaurantOutDTO> restaurantListToRestaurantOutDTOList(List<Restaurant> restaurantList);
 }

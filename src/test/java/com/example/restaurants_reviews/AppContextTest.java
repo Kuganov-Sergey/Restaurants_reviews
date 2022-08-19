@@ -10,6 +10,7 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = {
@@ -35,7 +36,7 @@ public class AppContextTest {
         restaurantService.addRestaurant(restaurant);
         Review review = new Review();
         review.setReview("best place");
-        review.setRestaurant_id(restaurantService.getAllRestaurants().get(0));
+        review.setRestaurant_id(restaurantService.getAllRestaurants(Pageable.unpaged()).toList().get(0));
         review.setRating(5);
         reviewService.addReview(review);
     }

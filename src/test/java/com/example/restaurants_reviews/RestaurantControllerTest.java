@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -40,12 +41,10 @@ public class RestaurantControllerTest extends AppContextTest {
     @Test
     void getAll() throws Exception {
         objectMapper.registerModule(new JavaTimeModule());
-        String expected = objectMapper.writeValueAsString(restaurantService.getAllRestaurants());
         this.mockMvc.perform(get("/restaurant/all"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(expected));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -98,7 +97,7 @@ public class RestaurantControllerTest extends AppContextTest {
     @Test
     void findRestaurantByName() throws Exception {
         RestaurantOutDTO restaurant = RestaurantOutDTO.builder()
-                .id(restaurantService.getAllRestaurants().get(0).getId())
+                .id(restaurantService.getAllRestaurants(Pageable.unpaged()).toList().get(0).getId())
                 .description("burgers")
                 .phoneNumber("+79997771122")
                 .emailAddress(null)

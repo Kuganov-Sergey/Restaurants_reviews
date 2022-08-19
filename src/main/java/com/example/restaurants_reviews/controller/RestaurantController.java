@@ -8,6 +8,7 @@ import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.mapper.RestaurantMapper;
 import com.example.restaurants_reviews.service.RestaurantService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,8 +33,9 @@ public class RestaurantController {
     }
 
     @GetMapping("/all")
-    public List<Restaurant> getAllRestaurants() {
-        return restaurantService.getAllRestaurants();
+    public Page<RestaurantOutDTO> getAllRestaurants(Pageable pageable) {
+        Page<Restaurant> allRestaurants = restaurantService.getAllRestaurants(pageable);
+        return allRestaurants.map(restaurantMapper::restaurantToRestaurantOutDTO);
     }
 
     @GetMapping("/description/{name}")

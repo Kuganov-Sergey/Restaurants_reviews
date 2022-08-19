@@ -54,10 +54,10 @@ public class ServicesTest extends AppContextTest {
         assertEquals(expectedRating, reviewService.getRatingByRestaurantName("mac"));
     }
 
-    @Test
-    void updateReviewByRestaurantId() {
-        String expectedReview = "best place";
-        reviewService.updateReviewByRestaurantId(restaurantService.getAllRestaurants().get(0).getId(), expectedReview);
-        assertEquals(expectedReview, reviewService.getReviewsByRestaurantName("mac").get(0));
-    }
+//    @Test
+//    void updateReviewByRestaurantId() {
+//        String expectedReview = "best place";
+//        reviewService.updateReviewByRestaurantId(restaurantService.getAllRestaurants().get(0).getId(), expectedReview);
+//        assertEquals(expectedReview, reviewService.getReviewsByRestaurantName("mac").get(0));
+//    }
 }
