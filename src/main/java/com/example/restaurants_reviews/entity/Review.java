@@ -29,6 +29,12 @@ public class Review {
     @Column(name = "rating")
     private Integer rating;
 
+    public Review(Restaurant restaurant_id, String review, Integer rating) {
+        this.restaurant_id = restaurant_id;
+        this.review = review;
+        this.rating = rating;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

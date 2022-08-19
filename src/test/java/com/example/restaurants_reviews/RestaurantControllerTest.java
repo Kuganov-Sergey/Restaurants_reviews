@@ -134,4 +134,9 @@ public class RestaurantControllerTest extends AppContextTest {
                                     "description": "Empty description"
                         }"""));
     }
+
+    @Test
+    public void testSortingGetAllRestaurantsPaging() {
+
+    }
 }

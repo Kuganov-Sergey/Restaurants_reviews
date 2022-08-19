@@ -1,7 +1,10 @@
 package com.example.restaurants_reviews.service.impl;
 
+import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.dao.ReviewRepository;
+import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.entity.Review;
+import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +19,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
     @Override
     @Transactional
     public List<String> getReviewsByRestaurantName(String name) {
+
         return reviewRepository.getReviewsByName(name);
     }
 
@@ -28,7 +35,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void addReview(Review review) {
+    public void addReview(Long restaurantId, String text, Integer rate) throws RestaurantNotFoundException {
+        Optional<Restaurant> byId = restaurantRepository.findById(restaurantId);
+        if (byId.isEmpty()) {
+            throw new RestaurantNotFoundException();
+        }
+        Restaurant restaurant = byId.get();
+        Review review = new Review(restaurant, text, rate);
         reviewRepository.save(review);
     }
 

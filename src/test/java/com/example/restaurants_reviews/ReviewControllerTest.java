@@ -1,6 +1,6 @@
 package com.example.restaurants_reviews;
 
-import com.example.restaurants_reviews.dto.out.ReviewOutDTO;
+import com.example.restaurants_reviews.dto.in.ReviewInDTO;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.service.ReviewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,12 +31,9 @@ public class ReviewControllerTest extends AppContextTest {
 
     @Test
     void getReviewsByRestaurantName() throws Exception {
-        ObjectMapper objectMapper = new JsonMapper();
-        String expected = objectMapper.writeValueAsString(reviewService.getReviewsByRestaurantName("mac"));
         this.mockMvc.perform(get("/review/{name}", "mac"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(expected));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -49,10 +46,10 @@ public class ReviewControllerTest extends AppContextTest {
 
     @Test
     void addReview() throws Exception {
-        ReviewOutDTO review = ReviewOutDTO.builder()
+        ReviewInDTO review = ReviewInDTO.builder()
                 .review("cool burgers")
-                .restaurant_id(restaurantService.findRestaurantByName("mac"))
-                .rating(5.0)
+                .restaurant_id(restaurantService.findRestaurantByName("mac").getId())
+                .rating(5)
                 .build();
         ObjectMapper objectMapper = new JsonMapper();
         String obj = objectMapper.writeValueAsString(review);

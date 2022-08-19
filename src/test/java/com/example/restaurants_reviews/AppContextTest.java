@@ -29,7 +29,7 @@ public class AppContextTest {
     private ReviewService reviewService;
 
     @BeforeAll
-    void addRestaurantsAndReviewsInDB() {
+    void addRestaurantsAndReviewsInDB() throws RestaurantNotFoundException {
         Restaurant restaurant = new Restaurant();
         restaurant.setName("mac");
         restaurant.setDescription("burgers");
@@ -38,7 +38,7 @@ public class AppContextTest {
         review.setReview("best place");
         review.setRestaurant_id(restaurantService.getAllRestaurants(Pageable.unpaged()).toList().get(0));
         review.setRating(5);
-        reviewService.addReview(review);
+        reviewService.addReview(review.getRestaurant_id().getId(), review.getReview(), review.getRating());
     }
 
     @BeforeEach
