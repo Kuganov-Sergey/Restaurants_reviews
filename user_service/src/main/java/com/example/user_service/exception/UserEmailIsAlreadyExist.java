@@ -1,4 +1,4 @@
 package com.example.user_service.exception;
 
-public class UserEmailIsAlreadyExist extends Exception{
+public class UserEmailIsAlreadyExist extends Exception {
 }

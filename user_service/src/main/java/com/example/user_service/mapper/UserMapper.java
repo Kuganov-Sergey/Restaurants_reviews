@@ -11,6 +11,7 @@ public interface UserMapper {
 
     UserOutDTO userEntityToUserOutDTO(UserEntity userEntity);
 
+    @Mapping(target = "roles", ignore = true)
     @Mapping(target = "registration_date", ignore = true)
     @Mapping(target = "id", ignore = true)
     UserEntity UserInDTOToUserEntity(UserInDTO userInDTO);

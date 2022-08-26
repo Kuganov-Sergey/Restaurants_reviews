@@ -28,6 +28,7 @@ class UserServiceITest extends UserServiceApplicationTests {
                 .name("toto")
                 .surname("toto")
                 .lastname("toto")
+                .password("aA@1tt")
                 .build();
         UserOutDTO user = userService.createUser(userInDTO);
         assertEquals(user, userService.getUser(user.getId()));
@@ -40,6 +41,7 @@ class UserServiceITest extends UserServiceApplicationTests {
                 .name("toto")
                 .surname("toto")
                 .lastname("toto")
+                .password("aA@1tt")
                 .build();
         UserOutDTO user = userService.createUser(userInDTO);
         UserEntity userEntity = new UserEntity();
@@ -62,6 +64,7 @@ class UserServiceITest extends UserServiceApplicationTests {
                 .name("toto")
                 .surname("toto")
                 .lastname("toto")
+                .password("aA@1tt")
                 .build();
         UserOutDTO user = userService.createUser(userInDTO);
         Long userId = userService.deleteUser(user.getId());

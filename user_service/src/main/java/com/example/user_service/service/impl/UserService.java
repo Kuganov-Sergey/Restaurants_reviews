@@ -1,9 +1,11 @@
 package com.example.user_service.service.impl;
 
 import com.example.user_service.DAO.UserRepository;
+import com.example.user_service.DTO.in.NewPasswordUserInDTO;
 import com.example.user_service.DTO.in.UserInDTO;
 import com.example.user_service.DTO.out.UserOutDTO;
 import com.example.user_service.entity.UserEntity;
+import com.example.user_service.exception.PasswordsDontMatchException;
 import com.example.user_service.exception.UserEmailIsAlreadyExist;
 import com.example.user_service.exception.UserNotFoundException;
 import com.example.user_service.mapper.UserMapper;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -47,6 +50,7 @@ public class UserService implements UserServiceI {
         userEntity.setId(id);
         userEntity.setRegistration_date(optionalUser.get().getRegistration_date());
         userEntity.setEmail(optionalUser.get().getEmail());
+        userEntity.setPassword(optionalUser.get().getPassword());
         return userMapper
                 .userEntityToUserOutDTO(userRepository.save(userEntity));
     }
@@ -73,5 +77,15 @@ public class UserService implements UserServiceI {
     @Override
     public Page<UserEntity> getAll(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    @Override
+    @Transactional
+    public void newPassword(NewPasswordUserInDTO newPasswordUserInDTO) throws PasswordsDontMatchException {
+        UserEntity user = userRepository.findByEmail(newPasswordUserInDTO.getEmail());
+        if (!Objects.equals(user.getPassword(), newPasswordUserInDTO.getOldPassword())) {
+            throw new PasswordsDontMatchException();
+        }
+        user.setPassword(newPasswordUserInDTO.getNewPassword());
     }
 }
