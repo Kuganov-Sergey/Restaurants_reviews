@@ -10,19 +10,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 public class MyUserDetails implements UserDetails {
+    private final UserEntity entity;
 
-    private final UserEntity userEntity;
-
-    public MyUserDetails(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public MyUserDetails(UserEntity entity) {
+        this.entity = entity;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> list = new ArrayList<>();
-        for (RoleEntity role : userEntity.getRoles()) {
+        for (RoleEntity role : entity.getRoles()) {
             list.add(new SimpleGrantedAuthority(role.getRole()));
         }
         return list;
@@ -30,31 +28,35 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userEntity.getPassword();
+        return entity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userEntity.getEmail();
+        return entity.getEmail();
     }
 
     @Override
     public boolean isAccountNonExpired() {
+        //TODO: add expiration date in DB
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
+        //TODO: add lock flag in DB
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
+        //TODO: add password expirition date
         return true;
     }
 
     @Override
     public boolean isEnabled() {
+        //TODO: add lock flag in DB
         return true;
     }
 }

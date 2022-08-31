@@ -20,7 +20,7 @@ public interface UserControllerI {
     @PostMapping("/create")
     UserOutDTO createUser(@RequestBody @Valid UserInDTO userInDTO) throws UserEmailIsAlreadyExist;
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+
     @PutMapping("/update/{id}")
     UserOutDTO updateUser(@RequestBody UserEntity userEntity, @PathVariable Long id) throws UserNotFoundException;
 
@@ -30,6 +30,7 @@ public interface UserControllerI {
     @GetMapping("/get/{id}")
     UserOutDTO getUser(@PathVariable Long id) throws UserNotFoundException;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @GetMapping("/get")
     Page<UserEntity> getAll(Pageable pageable);
 
