@@ -9,14 +9,12 @@ import com.example.user_service.exception.UserEmailIsAlreadyExist;
 import com.example.user_service.exception.UserNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 public interface UserControllerI {
 
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     UserOutDTO createUser(@RequestBody @Valid UserInDTO userInDTO) throws UserEmailIsAlreadyExist;
 
@@ -30,7 +28,6 @@ public interface UserControllerI {
     @GetMapping("/get/{id}")
     UserOutDTO getUser(@PathVariable Long id) throws UserNotFoundException;
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @GetMapping("/get")
     Page<UserEntity> getAll(Pageable pageable);
 
