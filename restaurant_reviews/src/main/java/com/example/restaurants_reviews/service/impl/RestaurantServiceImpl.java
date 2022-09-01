@@ -1,6 +1,7 @@
 package com.example.restaurants_reviews.service.impl;
 
 import com.example.restaurants_reviews.dao.RestaurantRepository;
+import com.example.restaurants_reviews.dto.in.AddOwnerInDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.IncorrectEmailAddressException;
@@ -122,5 +123,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Page<Restaurant> getPaginatedAllRestaurants(int pageNum, int pageSize) {
         Pageable paging = PageRequest.of(pageNum, pageSize);
         return restaurantRepository.findAll(paging);
+    }
+
+    @Override
+    public void addOwner(AddOwnerInDTO addOwnerInDTO) {
+
     }
 }

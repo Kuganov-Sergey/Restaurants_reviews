@@ -30,7 +30,6 @@ public class UserController implements UserControllerI {
     private final UserService userService;
     private final RabbitMessageOperations rabbitTemplate;
 
-
     public UserController(UserService userService, RabbitMessageOperations rabbitTemplate) {
         this.userService = userService;
         this.rabbitTemplate = rabbitTemplate;

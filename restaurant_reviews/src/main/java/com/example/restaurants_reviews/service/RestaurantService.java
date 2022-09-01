@@ -1,6 +1,7 @@
 package com.example.restaurants_reviews.service;
 
 
+import com.example.restaurants_reviews.dto.in.AddOwnerInDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.IncorrectEmailAddressException;
@@ -25,4 +26,5 @@ public interface RestaurantService {
     long addRestaurantByNameAndCreationDate(String name, LocalDate creationDate) throws FoundationDateIsExpiredException;
     LocalDate getCreationDateByRestaurantName(String name) throws RestaurantNotFoundException;
     Page<Restaurant> getPaginatedAllRestaurants(int pageNum, int pageSize);
+    void addOwner(AddOwnerInDTO addOwnerInDTO);
 }
